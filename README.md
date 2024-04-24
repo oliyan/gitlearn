@@ -3,7 +3,21 @@
 2. Navigate to a folder, right click and select Open Git Bash here
    ![alt text](image.png)
 
+## Settings
+Let's talk about `git config` settings. 
+### System Level 
+Settings are applied for all users
 
+### Global Level
+Settings are applied for all the Repos of current user
+```bash
+git config --global user.name 'Ravisankar Pandian' #To add a user name for the git application.
+
+git config --global user.email ravi@ravi.com #To add email for the git application 
+```
+
+### Local Level
+Settings are applied only for the current Repository
 # Usage
 
 ```bash
@@ -21,4 +35,5 @@ git config --global user.name 'Ravisankar Pandian' # to add name for the github?
 git config --global user.email 'ravi@ravi.com' # to add email for the github?
 
 ```
-[cilckhere](git.pdf)
+## Cheat Sheet
+Click [here](git.pdf) to view the cheat sheet for git commands.
