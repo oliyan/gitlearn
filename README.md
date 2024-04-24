@@ -3,21 +3,35 @@
 2. Navigate to a folder, right click and select Open Git Bash here
    ![alt text](image.png)
 
-## Settings
+# Settings
 Let's talk about `git config` settings. 
-### System Level 
+## System Level 
 Settings are applied for all users
 
-### Global Level
+## Global Level
 Settings are applied for all the Repos of current user
 ```bash
 git config --global user.name 'Ravisankar Pandian' #To add a user name for the git application.
 
 git config --global user.email ravi@ravi.com #To add email for the git application 
-```
 
-### Local Level
+git config --global core.editor "code --wait" #to setup the default editor as vscode. the --wait flag is to keep the window open until we close it
+
+git config --global -e # will open the config file for us to edit
+```
+Let's talk about CRLF
+![alt text](image-1.png)
+* Windows set the EOL (end of line) as CR LF (Carriage Return Line Feed)
+* Mac/Linux set the EOL as LF (only Line Feed)
+So it is important to setup the EOL characters correctly when working with different OSes. 
+The thumb rule is to set `true` for Windows and `input` for Mac/Linux
+```bash
+git config --global core.autocrlf input # for Mac/Linux
+git config --global core.autocrlf true # for Windows
+```
+## Local Level
 Settings are applied only for the current Repository
+
 # Usage
 
 ```bash
