@@ -19,6 +19,8 @@ git config --global core.editor "code --wait" #to setup the default editor as vs
 
 git config --global -e # will open the config file for us to edit
 ```
+
+
 Let's talk about CRLF
 ![alt text](image-1.png)
 * Windows set the EOL (end of line) as CR LF (Carriage Return Line Feed)
@@ -32,19 +34,28 @@ git config --global core.autocrlf true # for Windows
 ## Local Level
 Settings are applied only for the current Repository
 
+
 # Usage
+|Command|Description|
+|-|-|
+`git init`            | To initialize a repository <br> Then add files/folders to the workspace to edit them
+`git add <filename>`  | To add the modified/new files to the staging area <br> If you remove any file, then you need to `git add <removed_file>` in order to stage that change.
+
 
 ```bash
-git init # to initialize a repository
-# Then add files/folders to the workspace to edit them
+# 
+  
+# 
 
-git add <filename> # to add the modified/new files to the staging area
-# If you remove any file, then you need to 'git add <removed_file>' in order to stage that change.
 
-git add . # to add all the files to the staging area
+
+# to add all the files to the staging area
+  git add . 
 # This will automatically recognize the deleted file.
 
-git status # to show the status of our push/commit/staged changes
+# to show the status of our push/commit/staged changes
+  git status 
+
 git commit # to commit the staged files for change
 git commit -m 'commit message' # to commit along with a short commit message
 git push # to push the committed files to the master branch?
