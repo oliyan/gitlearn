@@ -36,11 +36,14 @@ Settings are applied only for the current Repository
 
 ```bash
 git init # to initialize a repository
-
 # Then add files/folders to the workspace to edit them
 
 git add <filename> # to add the modified/new files to the staging area
+# If you remove any file, then you need to 'git add <removed_file>' in order to stage that change.
+
 git add . # to add all the files to the staging area
+# This will automatically recognize the deleted file.
+
 git status # to show the status of our push/commit/staged changes
 git commit # to commit the staged files for change
 git commit -m 'commit message' # to commit along with a short commit message
