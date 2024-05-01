@@ -18,7 +18,7 @@ Enter the below command in the PASE terminal. *Don't forget to ==replace usernam
   ![alt text](image-1.png)
 
 ## Set Open Source path variables
-In order to be able to run the linux commands without specifying the path name, we have to setup the Open Sourc Path Variables. Do the below steps to do so.
+In order to be able to run the linux commands without specifying the path name, we have to setup the Open Source Path Variables. Do the below steps to do so.
 - Create a new file called .profile in your home folder by issuing the command `touch .profile`
 - Open the file `.profile` using VS Code's IFS Browser
   
@@ -28,8 +28,9 @@ In order to be able to run the linux commands without specifying the path name, 
 PATH=/QOpenSys/pkgs/bin:$PATH
 export PATH PASE_PATH
 ```
+---
 
-## Install GIT via YUM
+# Install GIT via YUM
 `yum install git`
 
 ## Connect a remote repository
@@ -72,3 +73,72 @@ export PATH PASE_PATH
 - Go to the PASE Terminal and enter
 `git clone git@github.com:ravisankar-PIO/gitlearn.git`
 ![alt text](image-10.png)
+
+---
+
+# Install Jenkins
+
+**Download the Jenkins installation JAR file first**
+Run the below commands in your PASE terminal
+```bash
+cd ~ 
+wget http://mirrors.jenkins.io/war-stable/latest/jenkins.war
+```
+
+**Start Jenkins using the Java Command**
+Jenkins can be started by using JAVA command. 
+
+>Note: The default JAVA version in IBMi sometimes would be 8. But Jenkins require version 11 and above. So we will tell IBMi to use the latest version of JAVA while running Jenkins. To do so, set up the environment variables.
+
+```bash
+export JAVA_HOME=/QOpenSys/QIBM/ProdData/JavaVM/jdk17/64bit
+export JENIKS_HOME=/home/CECUSER/jenk
+```
+Once the environment variable is set, we can run Jenkins by issuing below command.
+Notice that I am using the port# 7593
+```bash
+java -jar jenkins.war --httpPort=7593
+```
+Copy the password to your clipboard to use it later. 
+![alt text](image-13.png)
+
+**Jenkins initial setup in browser**
+Head over to the browser and type in the IP address of the IBM followed by `:7593`. In my case, it is `http://129.40.94.33:7593/`. Paste the admin password that we just copied a while ago.
+![alt text](image-14.png)
+
+Remember to select "default plugins"
+
+![alt text](image-15.png)
+
+```
+ravi
+welcome
+ravisankar.pandian@programmers.io
+```
+
+![alt text](image-16.png)
+
+![alt text](image-17.png)
+
+
+![alt text](image-18.png)
+
+
+`ADDENVVAR ENVVAR(JAVA_HOME) VALUE('/QOpenSys/QIBM/ProdData/JavaVM/jdk17/64bit') LEVEL(*SYS)`
+
+
+java -Dfile.encoding=UTF-8 -jar jenkins.war --httpPort=7593
+
+![alt text](image-11.png)
+
+0881c3c7c38647f7bfb67009669f7b92
+0881c3c7c38647f7bfb67009669f7b92
+
+
+______________
+>footnotes
+Refer [this](https://github.com/worksofliam/blog/issues/4) and [this](https://pm2.keymetrics.io/docs/usage/quick-start/) and [this](https://www.youtube.com/watch?v=0O2Nz5duuzg) link to automate Jenkins using PM2.
+
+> [Getting started](https://devopscube.com/jenkins-2-tutorials-getting-started-guide/) with Jenkins.
+>Create Jenkins [pipeline](https://www.jenkins.io/doc/pipeline/tour/hello-world/)
+
