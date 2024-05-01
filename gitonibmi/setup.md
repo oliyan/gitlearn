@@ -3,6 +3,7 @@
 - Open the PASE Terminal. Enter `Ctrl + Shift + J` once connected to the IBM I via VS Code and select *PASE* terminal
 ### Set Shell to BASH
   Either set it via VS Code. 
+  
   ![alt text](image.png)
   <br>
   **OR**
@@ -48,7 +49,8 @@ export PATH PASE_PATH
 
 **Copy the public key**
 - Navigate to the same folder in your VS Code as below and open the public key
-   ![alt text](image-5.png)
+  
+  ![alt text](image-5.png)
 - Copy all the contents of the file. We need to put that into our GitHub account.
   
 **Create New SSH Key in your remote repository**
