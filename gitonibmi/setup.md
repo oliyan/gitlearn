@@ -20,6 +20,7 @@ Enter the below command in the PASE terminal. *Don't forget to ==replace usernam
 In order to be able to run the linux commands without specifying the path name, we have to setup the Open Sourc Path Variables. Do the below steps to do so.
 - Create a new file called .profile in your home folder by issuing the command `touch .profile`
 - Open the file `.profile` using VS Code's IFS Browser
+  
   ![alt text](image-2.png)
 - Copy paste the below content on the `.profile` file. 
 ```bash
