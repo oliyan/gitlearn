@@ -88,35 +88,48 @@ wget http://mirrors.jenkins.io/war-stable/latest/jenkins.war
 **Start Jenkins using the Java Command**
 Jenkins can be started by using JAVA command. 
 
->Note: The default JAVA version in IBMi sometimes would be 8. But Jenkins require version 11 and above. So we will tell IBMi to use the latest version of JAVA while running Jenkins. To do so, set up the environment variables.
+>Note1: 
+The default JAVA version in IBMi sometimes would be 8. But Jenkins require version 11 and above. So we will tell IBMi to use the latest version of JAVA while running Jenkins. To do so, set up the environment variables.
+
+>Note2:
+We are setting up the Jenkins' home folder on a folder called 'jenk'. So that the whole application can be uprooted and planted in another location if required. 
+
 
 ```bash
 export JAVA_HOME=/QOpenSys/QIBM/ProdData/JavaVM/jdk17/64bit
-export JENIKS_HOME=/home/CECUSER/jenk
+export JENKINS_HOME=/home/CECUSER/jenk
 ```
 Once the environment variable is set, we can run Jenkins by issuing below command.
-Notice that I am using the port# 7593
+Notice that I am using the port# 7594
 ```bash
-java -jar jenkins.war --httpPort=7593
+java -jar jenkins.war --httpPort=7594
 ```
 Copy the password to your clipboard to use it later. 
-![alt text](image-13.png)
+![alt text](image-23.png)
 
 **Jenkins initial setup in browser**
-Head over to the browser and type in the IP address of the IBM followed by `:7593`. In my case, it is `http://129.40.94.33:7593/`. Paste the admin password that we just copied a while ago.
-![alt text](image-14.png)
+Head over to the browser and type in the IP address of the IBM followed by `:7594`. In my case, it is `http://129.40.94.33:7594/`. Paste the admin password that we just copied a while ago.
+![alt text](image-22.png)
 
-Remember to select "default plugins"
-
+Remember to select "Install suggested plugins"
+>Note: It will take some time to load the next screen. Don't click more than once, as it might end up in error. 
+![alt text](image-24.png)
 ![alt text](image-15.png)
 
-```
-ravi
-welcome
-ravisankar.pandian@programmers.io
+Let's create an Admin user which will be used to login to the Jenkins app from now on. 
+
+UserName: ravi
+Password: welcome
+Email: ravisankar.pandian@programmers.io
+![alt text](image-25.png)
+
+
+
 ```
 
-![alt text](image-16.png)
+```
+
+
 
 ![alt text](image-17.png)
 
@@ -130,12 +143,13 @@ ravisankar.pandian@programmers.io
 `ADDENVVAR ENVVAR(JAVA_HOME) VALUE('/QOpenSys/QIBM/ProdData/JavaVM/jdk17/64bit') LEVEL(*SYS)`
 
 
-java -Dfile.encoding=UTF-8 -jar jenkins.war --httpPort=7593
+java -Dfile.encoding=UTF-8 -jar jenkins.war --httpPort=7594
 
 ![alt text](image-11.png)
 
 0881c3c7c38647f7bfb67009669f7b92
 0881c3c7c38647f7bfb67009669f7b92
+0dd39072832a4cf6aca59fa65999a942
 
 
 ______________
