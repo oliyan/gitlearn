@@ -124,6 +124,9 @@ ravisankar.pandian@programmers.io
 ![alt text](image-18.png)
 
 
+----
+## References and foot notes
+
 `ADDENVVAR ENVVAR(JAVA_HOME) VALUE('/QOpenSys/QIBM/ProdData/JavaVM/jdk17/64bit') LEVEL(*SYS)`
 
 
