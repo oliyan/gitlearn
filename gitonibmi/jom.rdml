@@ -1,0 +1,156 @@
+[3:18 PM] Himanshu Gehlot
+* =============================================================
+
+* Delete Validation
+
+* =============================================================
+ 
+If Cond(#WRKTTY = D)
+
+If Cond(#WRKTYP = P)
+
+    #Count3 := 0
+
+    Select Fields(#STPCID #STPTRG) From_File(SMCNFG12) With_Key(#Y30CNO #WRKRGN #WRKSUB #WRKPHS #WRKTRG)
+
+    #Count3 += 1
+
+    Endselect
+
+    If Cond(#Count3 = 1)
+ 
+        * Can't delete last step if Config Rule has been pushed to jobs
+
+        * Check_For In_File(JB40SV3) With_Key(#STPCID)
+
+        * If_Status Is(*EQUALKEY)
+
+        * * ERROR**
+
+        * #W_NUM := 1
+
+        * #TSKSTS := 'VE'
+
+        * #TSKNAME := 'Last Step Can not be Deleted Step if Pushed to Jobs'
+
+        * #w_errmsg := 'Can''t Delete Last Step. The Config Rule has Already Been Pushed to Jobs. Add another step before attempting to delete this step ' + #STPCID.AsString
+
+        * #com_owner.addMsg Ikey('Message') Imsg(#w_errmsg)
+
+        * Return
+
+        * Endif
+ 
+        * Okay **
+
+        #W_NUM := 1
+
+        #TSKSTS := 'OK'
+
+        #TSKNAME := 'Step Can be Deleted'
+
+        #w_errmsg := 'Step Can be Deleted'
+
+        #com_owner.addMsg Ikey('Message') Imsg(#w_errmsg)
+
+    Else
+ 
+        * =============================================================
+
+        * Another record Exists with WRKSTP1 = STPTRG Allow Delete
+
+        * =============================================================
+
+        * Fetch Fields(#STP01 #STP02 #STPTRG) From_File(SMCNFG12) Where(#STP02 *NE #WRKSTP2) With_Key(#Y30CNO #WRKRGN #WRKSUB #WRKPHS #WRKTRG #WRKTRG)
+
+        Fetch Fields(#STP01 #STP02 #STPTRG) From_File(SMCNFG12) With_Key(#Y30CNO #WRKRGN #WRKSUB #WRKPHS #WRKTRG #WRKTRG)
+
+        If_Status Is_Not(*OKAY)
+
+            * ERROR**
+
+            #W_NUM := 1
+
+            #TSKSTS := 'VE'
+
+            #TSKNAME := 'Step Can not be Deleted'
+
+            #w_errmsg := 'Can''t Delete Record as other Steps exist with Trigger Step ' + #WRKTRG.AsString + ' but no Primary Step equal to Primary Step ' + #WRKSTP1.AsString + ' you are attempting to delete.'
+
+            #com_owner.addMsg Ikey('Message') Imsg(#w_errmsg)
+
+            Return
+
+        Endif
+
+    Endif
+
+*
+
+  Else
+
+    #TSKSTS := OK
+
+    * Okay **
+
+    #W_NUM := 1
+
+    #TSKSTS := 'OK'
+
+    #TSKNAME := 'Step was Deleted'
+
+    #w_errmsg := 'Step was Deleted'
+
+    #com_owner.addMsg Ikey('Message') Imsg(#w_errmsg)
+
+  Endif
+ 
+  If Cond(#TSKSTS *NE VE)
+
+    * * Delete
+
+    Delete From_File(SMCNFG) With_Key(#Y30CNO #WRKRGN #WRKSUB #WRKPHS #WRKSTP1 #WRKSTP2 #WRKTRG)
+
+    If_Status Is(*okay)
+
+        #J10RID := #WRKRGN
+
+        #J11SID := #WRKSUB
+
+        #J12PID := #WRKPHS
+
+        #STP01 := #WRKSTP1
+
+        #STP02 := #WRKSTP2
+
+        #STPTRG := #STPTRG
+
+        #STPTYP := #WRKTYP
+
+        #CRTDTM := #CRTDTM.Now
+
+        #EMCDE := 'DEL'
+
+        * Add Audit Record
+
+        Execute Subroutine(AUDIT)
+
+        * Record Successfully Deleted**
+
+        #TSKSTS := 'OK'
+
+        #W_NUM := 1
+
+        #TSKNAME := #TSKNAME + 'Record Deleted'
+
+        #w_errmsg := 'Record Deleted for Company ' + #Y30CNO.asstring + ', Region ' + #WRKRGN + ', Subdivision ' + #WRKSUB + ', Phase ' + #WRKPHS + ', Primary Step ' + #WRKSTP1.AsString + ', Alternate Step' + #WRKSTP2.AsString + ' & Trigger Step ' + #WRKTRG.AsString
+
+        #com_owner.addMsg Ikey('Message') Imsg(#w_errmsg)
+
+    Endif
+
+    Return
+
+  Endif
+
+Endif
