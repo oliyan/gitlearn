@@ -260,3 +260,16 @@ This need to be viewed
 
 
 [PIO's guide for OSSonIBMi](https://github.com/Programmersio-IBMi/OSSonIBMi)
+
+
+![alt text](image-30.png)
+
+a new file should be created for every build
+![alt text](image-34.png)
+
+![error-message](image-31.png)
+
+![alt text](image-32.png)
+
+files got created in the workspace directory
+![alt text](image-33.png)
