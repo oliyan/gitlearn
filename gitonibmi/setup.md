@@ -8,8 +8,11 @@
 - [Setup GITHUB](#setup-github)
 - [Setup Jenkins](#setup-jenkins)
 - [Setup PM2](#setup-pm2)
-  - [References and foot notes](#references-and-foot-notes)
 - [Install GitLab on IBMI](#install-gitlab-on-ibmi)
+- [Install GitBucket](#install-gitbucket)
+- [Footnotes/References](#footnotesreferences)
+- [Gmake or BOB?](#gmake-or-bob)
+- [Test Cases](#test-cases)
 
 ---
 <img src="initsetup.jpg"  width="50">
@@ -212,37 +215,9 @@ Enter `Ctrl+c` two times on the PASE terminal to kill the currently launched Jen
 }
 ```
 - Run this command to start the Jenkins => `pm2 start jen.json`
-## References and foot notes
-
-`ADDENVVAR ENVVAR(JAVA_HOME) VALUE('/QOpenSys/QIBM/ProdData/JavaVM/jdk17/64bit') LEVEL(*SYS)`
-
-
-java -Dfile.encoding=UTF-8 -jar jenkins.war --httpPort=7594
-
-![alt text](image-11.png)
-
-0881c3c7c38647f7bfb67009669f7b92
-0881c3c7c38647f7bfb67009669f7b92
-0dd39072832a4cf6aca59fa65999a942
-
 
 ______________
->footnotes
-Refer [this](https://github.com/worksofliam/blog/issues/4) and [this](https://pm2.keymetrics.io/docs/usage/quick-start/) and [this](https://www.youtube.com/watch?v=0O2Nz5duuzg) link to automate Jenkins using PM2.
 
-> [Getting started](https://devopscube.com/jenkins-2-tutorials-getting-started-guide/) with Jenkins.
->Create Jenkins [pipeline](https://www.jenkins.io/doc/pipeline/tour/hello-world/)
-
-> [dependencies for GitLab](https://archlinux.org/packages/extra/x86_64/gitlab/)
->
-> [CICD Script to connect GitLab with IBMI](https://gitlab.com/JDubbTX/IBMiExamples/-/blob/main/.gitlab-ci.yml?ref_type=heads)
->
-> Gitlab
-> https://docs.gitlab.com/ee/install/install_methods.html
-> https://docs.gitlab.com/ee/install/installation.html
-
-Third party Repos for IBMI
-https://ibmi-oss-docs.readthedocs.io/en/latest/yum/3RD_PARTY_REPOS.html
 
 # Install GitLab on IBMI
 yum install -y curl policycoreutils-python openssh-server perl
@@ -250,16 +225,56 @@ yum install -y curl policycoreutils-python openssh-server perl
 https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.rpm.sh
 ![alt text](image-27.png)
 
+---
 
-This need to be viewed
-![alt text](image-28.png)
+# Install GitBucket
+Gitbucket is a JAVA based SCM tool which can be run on IBMi.
+
+
+**Download the GitBucket installation JAR file first**
+Run the below commands in your PASE terminal
+```bash
+cd ~ 
+wget https://github.com/gitbucket/gitbucket/releases/download/4.40.0/gitbucket.war
+```
+
+**Start GitBucket using the Java Command**
+GitBucket can be started by using JAVA command. 
+*Notice the port number **8081***
+```bash
+java -jar gitbucket.war --port=8081
+```
+
+
+---
+# Footnotes/References
+
+- Jenkins 
+  - Refer [this](https://github.com/worksofliam/blog/issues/4) and [this](https://pm2.keymetrics.io/docs/usage/quick-start/) and [this](https://www.youtube.com/watch?v=0O2Nz5duuzg) link to automate Jenkins using PM2.
+
+  - [Getting started](https://devopscube.com/jenkins-2-tutorials-getting-started-guide/) with Jenkins.
+  - Create Jenkins [pipeline](https://www.jenkins.io/doc/pipeline/tour/hello-world/)
+  - [setup Jenkins on IBMi](https://github.com/worksofliam/blog/issues/43)
+
+- Gitlab
+  - [dependencies for GitLab](https://archlinux.org/packages/extra/x86_64/gitlab/)
+  - [CICD Script to connect GitLab with IBMI](https://gitlab.com/JDubbTX/IBMiExamples/-/blob/main/.gitlab-ci.yml?ref_type=heads)
+  - https://docs.gitlab.com/ee/install/install_methods.html
+  - https://docs.gitlab.com/ee/install/installation.html
+- GitBucket
+  - GitBucket [wiki](https://github.com/gitbucket/gitbucket/wiki)
+
+- Click [here](https://ibmi-oss-docs.readthedocs.io/en/latest/yum/3RD_PARTY_REPOS.html) to view about the third party Repos for IBMI
+
 
 [Main Cook book](https://pixerenet1.sharepoint.com/:w:/r/sites/ProgrammersIO/_layouts/15/Doc.aspx?sourcedoc=%7BC6BB8D56-3508-48C7-BA9F-0976B312D379%7D&file=ci_cd_ibmi_Ashish%20(InProcess).docx&action=default&mobileredirect=true) - follow this for clarity - A guide by Ashish
 
-[setup Jenkins on IBMi](https://github.com/worksofliam/blog/issues/43) - follow this for Jenkins related
+
 
 
 [PIO's guide for OSSonIBMi](https://github.com/Programmersio-IBMi/OSSonIBMi)
+
+[rpg-git-book](https://github.com/worksofliam/rpg-git-book/blob/main/4-repository-host.md) - This is an excellent starting point for moving to GIT
 
 
 ![alt text](image-30.png)
@@ -273,3 +288,30 @@ a new file should be created for every build
 
 files got created in the workspace directory
 ![alt text](image-33.png)
+
+---
+# Gmake or BOB?
+*Following [this](https://ibm.github.io/ibmi-bob/#/getting-started/installation) article for BOB*
+
+1. Install IBMi Repos =>   `yum install ibmi-repos`
+2. Install BOB => `yum install bob`
+faced an error
+
+3. update yum packages => `yum update` and try again to install bob
+4. Bob installed successfully
+5. Let's test the build command by cloning a git repo.
+   1. Create a library to save the build into
+    `system "CRTLIB LIB(BOBTEST) TEXT('Better Object Builder test project')"`
+    2. Clone the git repo (that already contains sample sources)
+   `git clone https://github.com/ibm/bob-recursive-example`
+   3. Change directory
+  `cd bob-recursive-example`
+   4. Set the environment variable to point the library that we just created
+  `export lib1=BOBTEST`
+   5. Run the build using,
+   `makei build`
+   ![alt text](image-35.png)
+
+---
+# Test Cases
+[unit test cases](https://github.com/worksofliam/IBMiUnit)
