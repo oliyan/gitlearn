@@ -2,9 +2,6 @@
 
 > <p align = center> Overview
 ---
-[Source control Management](#source-control-management)
-
-
 
 # Source Control Management
 ## GIT
@@ -40,7 +37,7 @@ But don't we have Turnover, Implementor, Aldon, and others already? How Git is d
   * **Open Source**
   * Can be **installed on IBMi** :) 
   * Issues, Pull Requests and Wiki for repositories
-
+---
 # CI/CD tools
 CI/CD is a practice where developers regularly merge their code changes into a central repository, followed by automated building and testing (if required). There are various tools available for IBMi.
 
@@ -58,15 +55,22 @@ CI/CD is a practice where developers regularly merge their code changes into a c
 * **Free and Open Source**
 * Can be integrated with GIT 
 * Can setup pipeline (or) workflows for deployment
-  
-
-# Build & Deploy
+---
+# Develop, Build & Deploy
 
 ## Modern IDE
+* VS Code
+* RDi
+* ILEditor
+* Arcad
 
 ## Running Test Cases
-### 
+### IBMiUnit
 
 ## Dependency Management
+### Source Orbit
 
 ## Deployment
+### Docker
+### ChRoot 
+A built in RPM command which will create our own `/QOpenSys ` directory
