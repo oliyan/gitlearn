@@ -1,5 +1,11 @@
 <h1 align=center> Modern DevOps Practices on IBMi</h1>
 
+<p align = center> Practical Guide </p>
+
+
+><h3> Table of Contents
+</h3>
+
 - [Initial Setup](#initial-setup)
   - [1. Connect to IBMI from VS Code](#1-connect-to-ibmi-from-vs-code)
   - [2. Set Shell to BASH](#2-set-shell-to-bash)
@@ -294,14 +300,14 @@ java -jar gitbucket.war --port=8081
 - Click [here](https://ibmi-oss-docs.readthedocs.io/en/latest/yum/3RD_PARTY_REPOS.html) to view about the third party Repos for IBMI
 
 
-[Main Cook book](https://pixerenet1.sharepoint.com/:w:/r/sites/ProgrammersIO/_layouts/15/Doc.aspx?sourcedoc=%7BC6BB8D56-3508-48C7-BA9F-0976B312D379%7D&file=ci_cd_ibmi_Ashish%20(InProcess).docx&action=default&mobileredirect=true) - follow this for clarity - A guide by Ashish
+[Main Cook book](https://pixerenet1.sharepoint.com/:w:/r/sites/ProgrammersIO/_layouts/15/Doc.aspx?sourcedoc=%7BC6BB8D56-3508-48C7-BA9F-0976B312D379%7D&file=ci_cd_ibmi_Ashish%20(InProcess).docx&action=default&mobileredirect=true) - follow this for step by step with screenshot - by Ashish
 
 
 
 
 [PIO's guide for OSSonIBMi](https://github.com/Programmersio-IBMi/OSSonIBMi)
 
-[rpg-git-book](https://github.com/worksofliam/rpg-git-book/blob/main/4-repository-host.md) - This is an excellent starting point for moving to GIT
+[RPG-GIT-BOOK](https://github.com/worksofliam/rpg-git-book/blob/main/4-repository-host.md) - This is an excellent starting point for moving to GIT
 
 ---
 # Gmake or BOB?
