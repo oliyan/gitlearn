@@ -6,33 +6,35 @@
 ><h3> Table of Contents
 </h3>
 
-- [Initial Setup](#initial-setup)
+- [Pre-requisites](#pre-requisites)
   - [Connect to IBMI from VS Code](#connect-to-ibmi-from-vs-code)
   - [Set Shell to BASH](#set-shell-to-bash)
   - [Set Open Source path/env variables](#set-open-source-pathenv-variables)
     - [Setup for PASE/SSH terminal](#setup-for-pasessh-terminal)
     - [Setup for IBMi Green screen](#setup-for-ibmi-green-screen)
-  - [Setup Verification](#setup-verification)
+  - [Verify the setup](#verify-the-setup)
 - [Install GIT](#install-git)
 - [Setup GITHUB](#setup-github)
 - [Setup Jenkins](#setup-jenkins)
     - [Download the Jenkins install file.](#download-the-jenkins-install-file)
     - [Start Jenkins](#start-jenkins)
-    - [Initial Setup](#initial-setup-1)
+    - [Initial Configuration](#initial-configuration)
     - [Work with GitHub Repository](#work-with-github-repository)
 - [Install GitBucket on IBMi](#install-gitbucket-on-ibmi)
 - [Footnotes/References](#footnotesreferences)
-- [Test Cases](#test-cases)
-- [Other Research](#other-research)
+- [Further Research](#further-research)
   - [GitLab](#gitlab)
   - [PM2](#pm2)
   - [Gmake or BOB?](#gmake-or-bob)
+  - [Chroot](#chroot)
+  - [Test Cases](#test-cases)
+  - [Migrate to IFS](#migrate-to-ifs)
 - [Conclusion](#conclusion)
 
 ---
 <img src="initsetup.jpg"  width="50">
 
-# Initial Setup
+# Pre-requisites
 
 1. [Connect to IBMI from VS Code](#connect-to-ibmi-from-vs-code) - *because, it is easy to execute shell commands and edit IFS files in VS Code!*
 2. [Set Shell to BASH](#set-shell-to-bash) - *because, the default shell is very limiting and irritating!*
@@ -82,14 +84,14 @@ export GITBUCKET_HOME=/home/CECUSER/gitbucket
 ### Setup for IBMi Green screen
 If you decide to start the application from the green screen, then you have to run these commands.
   ```js
-  ADDENVVAR ENVVAR('JAVA_HOME') VALUE('/QOpenSys/QIBM/ProdData/JavaVM/jdk') LEVEL(*SYS) REPLACE(*YES)
+  ADDENVVAR ENVVAR('JAVA_HOME') VALUE('/QOpenSys/QIBM/ProdData/JavaVM/jdk17/64bit') LEVEL(*SYS) REPLACE(*YES)
   ADDENVVAR ENVVAR('JAVA_HOME') VALUE('/home/CECUSER/jenkins') LEVEL(*SYS) REPLACE(*YES)
   ADDENVVAR ENVVAR('GITBUCKET_HOME') VALUE('/home/CECUSER/gitbucket') LEVEL(*SYS) REPLACE(*YES)
   /* note: You need to have ALLOBJ or SECOFR authority to run these commands  */
   ```
-  >Note: Even though one is enough, it doesn't hurt to setup the path/env variables at both the places.
+  >Note: Either setup of PASE or the setup of Green screen is enough. But it doesn't hurt to setup the path/env variables at both the places.
 
- ## Setup Verification
+ ## Verify the setup
  Once the initial setup is complete,
 - **Disconnect the IBMI and reconnect again**
 - Once connected, open up the PASE terminal again by entering `Ctrl+Shift+J` If the shell is set to bash successfully, you should see the below screen
@@ -173,20 +175,29 @@ wget http://mirrors.jenkins.io/war-stable/latest/jenkins.war
 Launching the Jenkins app is nothing but opening the `jenkins.war` file via a JAVA command with correct parameters. It can be started via multiple methods. 
 Method-1 is the preferred way. 
 *(Notice that I am using the **port# 9095**)*
-* **Method-1:** Start as a batch Job in Green SCreen
+* **Method-1:** Start as a batch Job in Green Screen
   Head over to the green screen and issue the command below. 
-  `SBMJOB CMD(QSH CMD('java -jar /home/CECUSER/jenkins.war --httpPort=9095')) JOB(JENKINS)`
-    
-
+  ```js
+  SBMJOB CMD(QSH CMD('java -jar /home/CECUSER/jenkins.war --httpPort=9095')) JOB(JENKINS)
+  ```
+    <br>
+* **Method-2:** Start directly in an interactive SSH sesion
+  Head over to the green screen and issue the command below. 
+  ```bash
+  java -jar /home/CECUSER/jenkins.war --httpPort=9095
+  ```
 <br>
 
- ### Initial Setup
-**Once Jenkins is started,** A default admin password is displayed on the screen. Copy it to your clipboard to use it later. 
+* **Method-3:** Use Process Management tool like PM2
+  Jump to [this section](#pm2) to view how to start the application.
+
+ ### Initial Configuration
+If all worked correctly, then a default admin password will be stored on the below location. Open the file `initialAdminPassword` and copy the contents of that file to your clipboard.
 ![alt text](image-23.png)
 
 
 **Jenkins initial setup in browser**
-Head over to the browser and type in the IP address of the IBM followed by the port# that we defined earlier. In my case, it is `http://129.40.94.33:9095/`. Paste the admin password that we just copied a while ago to unlock Jenkins. 
+Head over to the browser and type in the IP address of the IBMi followed by the port# that we defined earlier. In my case, it is `http://129.40.94.33:9095/`. Paste the admin password that we just copied a while ago to unlock Jenkins. 
 ![alt text](image-22.png)
 
 Remember to select =="Install suggested plugins"==
@@ -210,7 +221,7 @@ Email: ravisankar.pandian@programmers.io
 *Nice! we can start using the Jenkins now*
 ![alt text](image-17.png)
 
-*If you see a notification at the top as below, It is advised to have a separate node for building the code. But we will click dismiss for now and try exploring*
+*If you see a notification at the top as given below, It is advised to have a separate node for building the code. But we will click dismiss for now and continue with our work*
 ![alt text](image-18.png)
 
 <br>
@@ -249,11 +260,24 @@ wget https://github.com/gitbucket/gitbucket/releases/download/4.40.0/gitbucket.w
 ```
 
 **Start GitBucket using the Java Command**
-GitBucket can be started by using JAVA command. It is best advised to start the application as a batch job. Head over to the green screen and issue the command below.
-*Notice the port number **8085***
-```cl
-SBMJOB CMD(QSH CMD('java -jar /home/CECUSER/gitbucket.war --port=8085')) JOB(GITBUCKET)
-```
+Launching the GitBucket app is nothing but opening the `gitbucket.war` file via a JAVA command with correct parameters. It can be started via multiple methods. 
+
+*(Notice that I am using the **port# 8085**)*
+* **Method-1: (preferred)** Start as a batch Job in Green Screen
+  Head over to the green screen and issue the command below. 
+  ```js
+  SBMJOB CMD(QSH CMD('java -jar /home/CECUSER/gitbucket.war --port=8085')) JOB(GITBUCKET)
+  ```
+    <br>
+* **Method-2:** Start directly in an interactive SSH sesion
+  Head over to the green screen and issue the command below. 
+  ```bash
+  java -jar /home/CECUSER/gitbucket.war --httpPort=8085
+  ```
+<br>
+
+* **Method-3:** Use Process Management tool like PM2
+  Jump to [this section](#pm2) to view how to start the application.
 
 ---
 # Footnotes/References
@@ -282,12 +306,9 @@ SBMJOB CMD(QSH CMD('java -jar /home/CECUSER/gitbucket.war --port=8085')) JOB(GIT
 
 [RPG-GIT-BOOK](https://github.com/worksofliam/rpg-git-book/blob/main/4-repository-host.md) - This is an excellent starting point for moving to GIT
 
----
-# Test Cases
-[unit test cases](https://github.com/worksofliam/IBMiUnit)
 
 ---
-# Other Research
+# Further Research
 
 <img src="https://logowik.com/content/uploads/images/gitlab8368.jpg"  width="150">
 
@@ -313,8 +334,7 @@ https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.rpm.sh
 PM2 is a process management app (built on Node.js) which is like an enhanced Task Manager for IBMi. It will be used to autostart, keep the node.js & java based apps persistent.
 
 **Install PM2**
-- Kill the Jenkins app first if already launched.
-Enter `Ctrl+c` two times on the PASE terminal to kill the currently launched Jenkins' instance.
+- Kill the Jenkins app first if already launched by entering `Ctrl+c` two times on the PASE terminal where the Jenkins is currently launched.
 - Install NodeJS =>  `yum install nodejs14`
 
 - Then install PM2 =>  `npm install pm2@latest -g`
@@ -386,15 +406,32 @@ faced an error
    `makei build`
    ![alt text](image-35.png)
 
+---
+
+## Chroot
+Chroot creates IFS containers for an IBM i Job i.e. PASE process
+![alt text](image-40.png)
+>Further information about chroot can be found [here](https://docs.google.com/presentation/d/1t78A1YZlr88aYuEM2638U0nQywW4VQh_4H2RCtayZQo/edit#slide=id.g736c0ce3c_0_0)
+>A [blog post](https://www.krengeltech.com/2016/01/a-root-change-for-the-better/) about Chroot
+>Another [one](https://www.krengeltech.com/2016/02/a-root-change-for-the-better-part-ii/)
+
+
+---
+## Test Cases
+[unit test cases](https://github.com/worksofliam/IBMiUnit)
+
+---
+## Migrate to IFS
+[A tool to migrate the source members to IFS path](https://github.com/worksofliam/IBMiUnit)
 
 ---
 # Conclusion
-- Pick the right tools required for the DevOps
-  - Jenkins, IBMi-CI ***(new)***, GitLab Runners, etc., for CI-CD
+- Pick the right tools required for the DevOps Practice.
+  - Jenkins, IBMi-CI ***(new)***, GitLab CICID, GitHub Actions etc., for CI-CD
   - Gmake or BOB for building the code
   - Usage of Source Orbit ***(new)*** to resolve dependency conflicts
   - Right tool to setup unit test cases. 
   - Migrate the Sources from Members to IFS.
   - Self hosted or cloud based VCS. I vote for Self Hosted (GitBucket)
   
-*May be a **self hosted GitBucket**, running along with **Jenkins**, which triggers **Source Orbit** for builds, & uses **IBMi-CI** for building the objects (via BOB) would be an ideal setup.*
+*May be a **self hosted GitBucket**, running along with **Jenkins**, which triggers **Source Orbit** for checking object dependencies, once resolved which uses **gmake** to compile the sources & uses **IBMi-CI** for setting up the pipeline would be an ideal setup.*
