@@ -8,11 +8,14 @@
 - [Setup GITHUB](#setup-github)
 - [Setup Jenkins](#setup-jenkins)
 - [Setup PM2](#setup-pm2)
-- [Install GitLab on IBMI](#install-gitlab-on-ibmi)
-- [Install GitBucket](#install-gitbucket)
+  - [Install PM2](#install-pm2)
+  - [Configure PM2](#configure-pm2)
+- [Install GitLab on IBMi](#install-gitlab-on-ibmi)
+- [Install GitBucket on IBMi](#install-gitbucket-on-ibmi)
 - [Footnotes/References](#footnotesreferences)
 - [Gmake or BOB?](#gmake-or-bob)
 - [Test Cases](#test-cases)
+- [Further Research](#further-research)
 
 ---
 <img src="initsetup.jpg"  width="50">
@@ -173,6 +176,17 @@ Email: ravisankar.pandian@programmers.io
 
 ![alt text](image-18.png)
 
+![alt text](image-30.png)
+
+a new file should be created for every build
+![alt text](image-34.png)
+
+![error-message](image-31.png)
+
+![alt text](image-32.png)
+
+files got created in the workspace directory
+![alt text](image-33.png)
 
 ----
 
@@ -182,7 +196,12 @@ Add SSh key to SSH agent ssh-add ~/.ssh/id_rsa.
 Add github/gitlab to known host `ssh-keyscan github.com >> ~/.ssh/known_hosts`
 
 ---
+<img src="pm2logo.png"  width="350">
+
 # Setup PM2
+PM2 is a process management app (built on Node.js) which is like an enhanced Task Manager for IBMi. It will be used to autostart, keep the node.js & java based apps persistent.
+
+## Install PM2
 - Kill the Jenkins app first
 Enter `Ctrl+c` two times on the PASE terminal to kill the currently launched Jenkins' instance.
 - Install NodeJS =>  `yum install nodejs14`
@@ -193,6 +212,8 @@ Enter `Ctrl+c` two times on the PASE terminal to kill the currently launched Jen
   - Open the .profile file and add a new location to include in path
   ![alt text](image-29.png)
   - Save and close the `.profile` file. Disconnect from IBMi and connect again (for the changes to take effect).
+
+## Configure PM2
 - Create a new file called `jen.json` in your home folder. This will be used to start the Jenkins app.
   `touch jen.json`
 - Paste this content into that file as below.
@@ -219,7 +240,7 @@ Enter `Ctrl+c` two times on the PASE terminal to kill the currently launched Jen
 ______________
 
 
-# Install GitLab on IBMI
+# Install GitLab on IBMi
 yum install -y curl policycoreutils-python openssh-server perl
 
 https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.rpm.sh
@@ -227,7 +248,7 @@ https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.rpm.sh
 
 ---
 
-# Install GitBucket
+# Install GitBucket on IBMi
 Gitbucket is a JAVA based SCM tool which can be run on IBMi.
 
 
@@ -250,19 +271,25 @@ java -jar gitbucket.war --port=8081
 # Footnotes/References
 
 - Jenkins 
-  - Refer [this](https://github.com/worksofliam/blog/issues/4) and [this](https://pm2.keymetrics.io/docs/usage/quick-start/) and [this](https://www.youtube.com/watch?v=0O2Nz5duuzg) link to automate Jenkins using PM2.
+  - Refer [this](https://github.com/worksofliam/blog/issues/4), [this](https://pm2.keymetrics.io/docs/usage/quick-start/) and [this](https://www.youtube.com/watch?v=0O2Nz5duuzg) link to automate Jenkins using PM2.
 
   - [Getting started](https://devopscube.com/jenkins-2-tutorials-getting-started-guide/) with Jenkins.
   - Create Jenkins [pipeline](https://www.jenkins.io/doc/pipeline/tour/hello-world/)
-  - [setup Jenkins on IBMi](https://github.com/worksofliam/blog/issues/43)
+  - [setup Jenkins](https://github.com/worksofliam/blog/issues/43) on IBMi
 
 - Gitlab
   - [dependencies for GitLab](https://archlinux.org/packages/extra/x86_64/gitlab/)
   - [CICD Script to connect GitLab with IBMI](https://gitlab.com/JDubbTX/IBMiExamples/-/blob/main/.gitlab-ci.yml?ref_type=heads)
   - https://docs.gitlab.com/ee/install/install_methods.html
   - https://docs.gitlab.com/ee/install/installation.html
-- GitBucket
-  - GitBucket [wiki](https://github.com/gitbucket/gitbucket/wiki)
+- GitBucket 
+  - A VCS that can be hosted within IBMi. Click [here](https://github.com/gitbucket/gitbucket/wiki) to learn more.
+- Source Orbit
+  - Defintion of [Source Orbit](https://ibm.github.io/sourceorbit/#/) - a dependency management system
+  - A [blog post](https://github.com/worksofliam/blog/issues/66) by Liam Barry that tells about the SO - SourceOrbit.
+- IBMi - CI
+  - A built in CI tool within IBMi. See it in action [here](https://www.youtube.com/watch?v=t-9nOyBjjCU)
+  - Learn more about [IBMi-CI](https://github.com/IBM/ibmi-ci)
 
 - Click [here](https://ibmi-oss-docs.readthedocs.io/en/latest/yum/3RD_PARTY_REPOS.html) to view about the third party Repos for IBMI
 
@@ -275,19 +302,6 @@ java -jar gitbucket.war --port=8081
 [PIO's guide for OSSonIBMi](https://github.com/Programmersio-IBMi/OSSonIBMi)
 
 [rpg-git-book](https://github.com/worksofliam/rpg-git-book/blob/main/4-repository-host.md) - This is an excellent starting point for moving to GIT
-
-
-![alt text](image-30.png)
-
-a new file should be created for every build
-![alt text](image-34.png)
-
-![error-message](image-31.png)
-
-![alt text](image-32.png)
-
-files got created in the workspace directory
-![alt text](image-33.png)
 
 ---
 # Gmake or BOB?
@@ -315,3 +329,15 @@ faced an error
 ---
 # Test Cases
 [unit test cases](https://github.com/worksofliam/IBMiUnit)
+
+---
+# Further Research
+- Pick the right tools required for the DevOps
+  - Jenkins, IBMi-CI ***(new)***, GitLab Runners, etc., for CI-CD
+  - Gmake or BOB for building the code
+  - Usage of Source Orbit ***(new)*** to resolve dependency conflicts
+  - Right tool to setup unit test cases. 
+  - Migrate the Sources from Members to IFS.
+  - Self hosted or cloud based VCS. I vote for Self Hosted (GitBucket)
+  
+*May be a **self hosted GitBucket**, running along with **Jenkins**, which triggers **Source Orbit** for builds, & uses **IBMi-CI** for building the objects (via BOB) would be an ideal setup.*
