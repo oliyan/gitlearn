@@ -435,3 +435,20 @@ Chroot creates IFS containers for an IBM i Job i.e. PASE process
   - Self hosted or cloud based VCS. I vote for Self Hosted (GitBucket)
   
 *May be a **self hosted GitBucket**, running along with **Jenkins**, which triggers **Source Orbit** for checking object dependencies, once resolved which uses **gmake** to compile the sources & uses **IBMi-CI** for setting up the pipeline would be an ideal setup.*
+
+
+![alt text](image-42.png)
+
+![alt text](image-43.png)
+
+![alt text](image-44.png)
+
+![alt text](image-45.png)
+
+![alt text](image-46.png)
+
+![alt text](image-47.png)
+
+![alt text](image-48.png)
+
+![alt text](image-49.png)
