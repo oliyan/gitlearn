@@ -19,12 +19,14 @@
     - [Download the Jenkins install file.](#download-the-jenkins-install-file)
     - [Start Jenkins](#start-jenkins)
     - [Initial Configuration](#initial-configuration)
-    - [Work with GitHub Repository](#work-with-github-repository)
+    - [Create a New Job in Jenkins](#create-a-new-job-in-jenkins)
+    - [Configure the Job to connect to GitHub](#configure-the-job-to-connect-to-github)
 - [Install GitBucket on IBMi](#install-gitbucket-on-ibmi)
 - [Footnotes/References](#footnotesreferences)
 - [Further Research](#further-research)
   - [GitLab](#gitlab)
   - [PM2](#pm2)
+  - [Service-Commander](#service-commander)
   - [Gmake or BOB?](#gmake-or-bob)
   - [Chroot](#chroot)
   - [Test Cases](#test-cases)
@@ -35,18 +37,20 @@
 <img src="initsetup.jpg"  width="50">
 
 # Pre-requisites
-
-1. **Connect to IBMI from VS Code** - *because, it is easy to execute shell commands and edit IFS files in VS Code!*
-2. **Set Shell to BASH** - *because, the default shell is very limiting and irritating!*
-3. **Set Open Source Path Variables** - *because, we need to tell the IBMI where to locate the open source linux commands.*
-4. **Verify the Setup** - *because, we don't want to run into any issues while installing the software.*
+1. A GitHub Account
+2. VS Code Editor
+3. An IBM i server running 7.2 or above
+4. Some patience and desire to learn something new.
 
 ## Connect to IBMI from VS Code
+>*because, it is easy to execute shell commands and edit IFS files in VS Code!*
 - Connect to IBMI via VS Code. You should knew that now already. If not, check [this](https://github.com/Programmersio-IBMi/vscode-integration/blob/main/README.md) link and come back here once you have connected your IBMi.  
 - Enter `Ctrl + Shift + J` (once connected to the IBM I via VS Code) and select **PASE** terminal.
 
 
 ## Set Shell to BASH
+>*because, the default shell is very limiting and irritating!*
+
 Either set it via VS Code. 
   
   ![alt text](image.png)
@@ -60,6 +64,8 @@ Enter the below command in the PASE terminal. *Don't forget to ==replace cecuser
   ```
 
 ## Set Open Source path/env variables
+>*because, we need to tell the IBMI where to locate the open source linux commands.*
+
 In order to be able to run the linux commands without specifying the location of the command, we have to setup the Open Source Path/Environment Variables. Do the below steps to do so.
 ### Setup for PASE/SSH terminal
 Follow the below steps if you decide to run the applications from the PASE/SSH Terminal
@@ -86,10 +92,12 @@ export GITBUCKET_HOME=/home/CECUSER/gitbucket
 If you decide to start the application from the green screen, then you have to run these commands.
   ```js
   ADDENVVAR ENVVAR('JAVA_HOME') VALUE('/QOpenSys/QIBM/ProdData/JavaVM/jdk17/64bit') LEVEL(*SYS) REPLACE(*YES)
-  ADDENVVAR ENVVAR('JAVA_HOME') VALUE('/home/CECUSER/jenkins') LEVEL(*SYS) REPLACE(*YES)
+  ADDENVVAR ENVVAR('JENKINS_HOME') VALUE('/home/CECUSER/jenkins') LEVEL(*SYS) REPLACE(*YES)
   ADDENVVAR ENVVAR('GITBUCKET_HOME') VALUE('/home/CECUSER/gitbucket') LEVEL(*SYS) REPLACE(*YES)
   /* note: You need to have ALLOBJ or SECOFR authority to run these commands  */
   ```
+  ![alt text](image-50.png)
+
   >Note: Either setup of PASE or the setup of Green screen is enough. But it doesn't hurt to setup the path/env variables at both the places.
 
  ## Verify the setup
@@ -113,11 +121,15 @@ If you decide to start the application from the green screen, then you have to r
 Enter the command below in your PASE terminal.
 `yum install git`
 
+![alt text](image-51.png)
+>*GIT has been installed successfully*
 ---
 
 <img src="githublogo.jpg"  width="100">
 
 # Setup GITHUB
+Let's connect our IBMi with the GitHub and try pushing (a.k.a. updating our sources) directly to the GitHub Repository.
+
 **Setup the user name and email for your local git**
   ```bash
   git config --global user.name 'Ravisankar Pandian' #To add a user name for the git application.
@@ -130,33 +142,85 @@ Enter the command below in your PASE terminal.
 - Hit enter again to save the key pair at the default location itself. 
 - Hit enter again (no passphrase is required)
 - Notice the location of the public key and open it in your VS Code. 
- ![alt text](image-6.png)
+ ![alt text](image-52.png)
 
 **Copy the public key**
 - Navigate to the same folder in your VS Code as below and open the public key
   
-  ![alt text](image-5.png)
+  ![alt text](image-53.png)
 - Copy all the contents of the file. We need to put that into our GitHub account.
   
-**Create New SSH Key in your remote repository**
+**Create New SSH Key in your GitHub account**
 - Open https://github.com/settings/keys and click 'New SSH Key'. 
 - Enter some title, Select the key type as "authentication key", paste the previously copied public key, and finally select 'Add SSH Key"
-  ![alt text](image-7.png)
+  ![alt text](image-54.png)
 - Once added, you should see the below screen
-  ![alt text](image-8.png)
+  ![alt text](image-55.png)
 
-**Connect to the remote repository**
-- Now it is time for us to connect to a remote repo. I have setup a GitHub repository called *'gitlearn'* for this experiment and I am going to clone that. 
-
-- You can create your own repo in your github account and copy the command to clone via SSH as below.
-  ![alt text](image-9.png)
-
+**Create a GitHub repository**
+- Let's create a new empty repository in our GitHub account.
+- Click on Repository >> Click New
+  ![alt text](image-56.png)
+- Enter the repository name, some meaningful description, set it public, add a README.md file and click create repository.
+  ![alt text](image-57.png)
+- Nice, we have our own GitHub repository now.
+  ![alt text](image-58.png)
+- Click on the green `<> Code` button, click on `SSH` and copy the URL
+   ![alt text](image-59.png)
+<br>
 - FYI: This is the command that I just copied
-`git@github.com:ravisankar-PIO/gitlearn.git`
+`git@github.com:ravisankar-PIO/gitonibmi.git`
 
-- Go to the PASE Terminal and enter
-`git clone git@github.com:ravisankar-PIO/gitlearn.git`
-![alt text](image-10.png)
+**Clone the GitHub Repository to your IBMi**
+- Go to the PASE Terminal in VS Code and enter
+`git clone git@github.com:ravisankar-PIO/gitonibmi.git`
+Enter `yes` if it asks for anything about Fingerprint and Keys. Now we have successfully cloned the GitHub Repository to our IBMi
+
+  ![alt text](image-60.png)
+
+**Create a simple sqlrpgle program**
+- Let's create an SQLRPGLE program which inserts a record into some file for every time it is called.
+- Go to the PASE Terminal in VS Code and enter
+- `cd gitonibmi` =>  *to navigate to our repository folder*
+- `git init` => *to initialize the git repository*
+- `touch buildr.sqlrpgle` => *to create a new SQLRPGLE program*
+- Once created, open the same file in your VS Code editor via the IFS Browser.
+  ![alt text](image-62.png)
+<br>
+- Copy paste the below code into the `buildr.sqlrpgle` file and save it.
+```js
+**free
+dcl-s count int(10);
+dcl-s note varchar(50);
+
+exec sql SELECT COUNT(*) INTO :count FROM ravi.buildpf;
+count += 1;
+note = 'Build# ' + %char(count);
+exec sql INSERT INTO ravi.buildpf (note) VALUES (:note);
+
+*inlr = *on;
+```
+
+**Commit the program**
+- Enter the below commands one by one. Read below for explanation
+```bash
+git add buildr.sqlrpgle
+git commit -m "added build sqlrpgle program"
+git push
+```
+>*Explanation*
+> * `git add` => we're telling the GIT that we're adding a new file in our repository.
+> * `git commit` => we're telling the GIT that we want to commit our changes that we've made to the previously added files. The commit message describes the purpose of this change. 
+> *  `git push` => we're telling the GIT to push the changes to the remote repository (GitHub) 
+> * *Tip: between every command, you can check the status by issuing 'git status' command*
+
+- Once the changes are pushed, you should see a message like something below
+  ![alt text](image-63.png)
+
+- Head over to the GitHub repository to check if the changes are updated there.
+  ![alt text](image-64.png)
+
+**Congratulations! You have successfully modernized the IBM i development to GitHub.**
 
 ---
 <img src="jenkinslogo.jpg"  width="150">
@@ -170,36 +234,38 @@ Run the below commands in your PASE terminal to download the `jenkins.war` via `
 cd ~ 
 wget http://mirrors.jenkins.io/war-stable/latest/jenkins.war
 ```
+![alt text](image-65.png)
+> *Jenkins is downloaded successfully!*
 <br>
 
 ### Start Jenkins
-Launching the Jenkins app is nothing but opening the `jenkins.war` file via a JAVA command with correct parameters. It can be started via multiple methods. 
-Method-1 is the preferred way. 
+Launching the Jenkins app is nothing but launching the `jenkins.war` file via a JAVA command with correct parameters. It can be started via multiple methods. For the very first run, we will follow method-1
 *(Notice that I am using the **port# 9095**)*
-* **Method-1:** Start as a batch Job in Green Screen
-  Head over to the green screen and issue the command below. 
-  ```js
-  SBMJOB CMD(QSH CMD('java -jar /home/CECUSER/jenkins.war --httpPort=9095')) JOB(JENKINS)
-  ```
-    <br>
-* **Method-2:** Start directly in an interactive SSH sesion
+* **Method-1:** Start directly in an interactive SSH sesion
   Head over to the green screen and issue the command below. 
   ```bash
   java -jar /home/CECUSER/jenkins.war --httpPort=9095
   ```
 <br>
 
-* **Method-3:** Use Process Management tool like PM2
-  Jump to [this section](#pm2) to view how to start the application.
+* **Method-2:** Start as a batch Job in Green Screen
+  Head over to the green screen and issue the command below. 
+  ```js
+  SBMJOB CMD(QSH CMD('java -jar /home/CECUSER/jenkins.war --httpPort=9095')) JOB(JENKINS)
+  ```
+    <br>
+* **Method-3:** Use Process Management tool like PM2 or Service Commander.
+  Jump to [this section](#pm2) to view how to start the application via PM2.
+  Jump to [this section]() to view how to start the application via Service-Commander.
 
  ### Initial Configuration
 If all worked correctly, then a default admin password will be stored on the below location. Open the file `initialAdminPassword` and copy the contents of that file to your clipboard.
-![alt text](image-23.png)
+![alt text](image-67.png)
 
 
 **Jenkins initial setup in browser**
-Head over to the browser and type in the IP address of the IBMi followed by the port# that we defined earlier. In my case, it is `http://129.40.94.33:9095/`. Paste the admin password that we just copied a while ago to unlock Jenkins. 
-![alt text](image-22.png)
+Head over to the browser and type in the IP address of the IBMi followed by the port# that we defined earlier. In my case, it is `http://129.40.94.17:9095/`. Paste the admin password that we just copied a while ago to unlock Jenkins. 
+![alt text](image-68.png)
 
 Remember to select =="Install suggested plugins"==
 *(**Note**: It will take some time to load the next screen. Don't click more than once, as it might end up in error)*
@@ -227,8 +293,56 @@ Email: ravisankar.pandian@programmers.io
 
 <br>
 
-### Work with GitHub Repository
-![alt text](image-30.png)
+### Create a New Job in Jenkins
+- On the Dashboard, click on New Item
+  ![alt text](image-69.png)
+  <br>
+- Enter the Job Name as `gitonibmi`, select `freestyle project` and click OK.
+  ![alt text](image-71.png)
+
+### Configure the Job to connect to GitHub
+- In the Job Configuration Page, Click on the `Source Code Management` on the left, and select `GIT`. 
+- Remember the Repository URL that we copied a while ago from our GitHub? We need to paste that over here. 
+  ![alt text](image-72.png)
+
+**Add a credential**
+- Notice the `+Add` button under credential. Click on it to add a credential to connect to the GitHub securely.
+  *Note: Sometimes, the button will load slowly. So don't press multiple times*
+  ![alt text](image-73.png)
+- Enter the details as below
+  - Domain - Global (unrestricted)
+  - Kind - SSH Username with Private key
+  - Scope - Global
+  - ID - anything you like
+  - Private key - Select `enter directly` => click add => Open the private key from your ssh folder as below => copy the entire content => finally paste it on Jenkins window.
+  ![alt text](image-74.png) <br> 
+  - Then click add
+  - Then, click on the credentials drop down, and select the one that has your user name.
+   ![alt text](image-79.png)
+
+**Add a Build Trigger**
+- Click on `Build Triggers` on the left menu and check `Poll SCM`
+  ![alt text](image-75.png)
+- Enter the value as `* * * * *` (5 asteriks with spaces inbetween). This is a cron scheduler which will look for any changes made in our repository for every minute.
+  ![alt text](image-76.png)
+
+**Add Build Steps**
+- Scroll down to find `Build Steps` and click on it, then select `Execute Shell`
+  ![alt text](image-77.png)
+- Enter the below PASE command 
+  `system "CALL PGM(RAVI/BUILDR)"`
+  This means whenever the GitHub repository is committed (i.e. updated), we will call a program called `buildr` 
+  <br>
+- That's it! We will save the Job Configuration now.
+  ![alt text](image-78.png)
+
+**Error!**
+If you see the error as below and wondering what you did wrong? Then don't worry I am on your side too! Let's just proceed forward.
+![alt text](image-80.png)  
+
+
+
+
 
 a new file should be created for every build
 ![alt text](image-34.png)
@@ -382,6 +496,10 @@ PM2 is a process management app (built on Node.js) which is like an enhanced Tas
 - Run this command to start the Jenkins => `pm2 start jen.json`
 - Once started, we can view the started apps by => `pm2 ls`
   ![alt text](image-37.png)
+- For some reason, I am **unable to end the application via PM2**
+
+---
+## Service-Commander
 
 ---
 
