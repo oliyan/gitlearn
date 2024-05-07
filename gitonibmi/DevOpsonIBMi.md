@@ -36,9 +36,10 @@
 
 # Pre-requisites
 
-1. [Connect to IBMI from VS Code](#connect-to-ibmi-from-vs-code) - *because, it is easy to execute shell commands and edit IFS files in VS Code!*
-2. [Set Shell to BASH](#set-shell-to-bash) - *because, the default shell is very limiting and irritating!*
-3. [Set Open Source Path Variables](#set-open-source-path-variables) - *because, we need to tell the IBMI where to locate the open source linux commands.*
+1. **Connect to IBMI from VS Code** - *because, it is easy to execute shell commands and edit IFS files in VS Code!*
+2. **Set Shell to BASH** - *because, the default shell is very limiting and irritating!*
+3. **Set Open Source Path Variables** - *because, we need to tell the IBMI where to locate the open source linux commands.*
+4. **Verify the Setup** - *because, we don't want to run into any issues while installing the software.*
 
 ## Connect to IBMI from VS Code
 - Connect to IBMI via VS Code. You should knew that now already. If not, check [this](https://github.com/Programmersio-IBMi/vscode-integration/blob/main/README.md) link and come back here once you have connected your IBMi.  
@@ -272,7 +273,7 @@ Launching the GitBucket app is nothing but opening the `gitbucket.war` file via 
 * **Method-2:** Start directly in an interactive SSH sesion
   Head over to the green screen and issue the command below. 
   ```bash
-  java -jar /home/CECUSER/gitbucket.war --httpPort=8085
+  java -jar /home/CECUSER/gitbucket.war --port=8085
   ```
 <br>
 
