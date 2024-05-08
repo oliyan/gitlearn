@@ -55,7 +55,7 @@
 
 Either set it via VS Code. 
   
-  ![alt text](image.png)
+  ![alt text](bash.png)
   
 
   **<p align="center">OR</p>**
@@ -75,7 +75,7 @@ Follow the below steps if you decide to run the applications from the PASE/SSH T
 - Enter command `touch .profile` in order to create a new file called *.profile*
 - Open the file `.profile` using VS Code's IFS Browser
   
-  ![alt text](image-2.png)
+  ![alt text](dotprofile.png)
 - Copy paste the below content on the `.profile` file.
 
 ```bash
@@ -106,12 +106,12 @@ If you decide to start the application from the green screen, then you have to r
  Once the initial setup is complete,
 - **Disconnect the IBMI and reconnect again**
 - Once connected, open up the PASE terminal again by entering `Ctrl+Shift+J` If the shell is set to bash successfully, you should see the below screen
-![alt text](image-1.png)
+![alt text](image-91.png)
 - Run the below command to check whether the path variable has been setup correctly.
   ```bash
   echo -e '\n' $PATH '\n' $JAVA_HOME '\n' $JENKINS_HOME '\n' $GITBUCKET_HOME '\n'
   ```
-  ![alt text](image-38.png)
+  ![alt text](verify.png)
 
 ## Update yum packages
 In the PASE Terminal, enter `yum update` followed by `yum upgrade`
@@ -279,9 +279,9 @@ Head over to the browser and type in the IP address of the IBMi followed by the 
 
   Remember to select =="Install suggested plugins"==
   *(**Note**: It will take some time to load the next screen. Don't click more than once, as it might end up in error)*
-  ![alt text](image-24.png)
+  ![alt text](jenplugin.png)
   *plugins are currently loaded*
-  ![plugins are loaded](image-15.png)
+  ![plugins are loaded](image-99.png)
 
   Let's create an Admin user which will be used to login to the Jenkins app from now on. 
 
@@ -290,16 +290,16 @@ Head over to the browser and type in the IP address of the IBMi followed by the 
   Password: welcome
   Email: ravisankar.pandian@programmers.io
   ```
-  ![alt text](image-25.png)
+  ![alt text](adminuser.png)
 
   *click on save and finish to complete the setup*
-  ![alt text](image-26.png)
+  ![alt text](instance.png)
 
   *Nice! we can start using the Jenkins now*
-  ![alt text](image-17.png)
+  ![alt text](image-97.png)
 
   *If you see a notification at the top as given below, It is advised to have a separate node for building the code. But we will click dismiss for now and continue with our work*
-  ![alt text](image-18.png)
+  ![alt text](image-98.png)
 
 <br>
 
@@ -459,7 +459,7 @@ First, I **Installed the dependencies for GitLab**
 `yum install -y curl policycoreutils-python openssh-server perl`
 
 https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.rpm.sh
-![alt text](image-27.png)
+![alt text](gitlabd.png)
 
 - Read more about Gitlab
   - [dependencies for GitLab](https://archlinux.org/packages/extra/x86_64/gitlab/)
@@ -481,7 +481,7 @@ PM2 is a process management app (built on Node.js) which is like an enhanced Tas
 
 - Add the location of the nodejs's binary to the path
   - Open the .profile file and add a new location to include in path
-  ![alt text](image-29.png)
+  ![alt text](pm2path.png)
   - Save and close the `.profile` file. Disconnect from IBMi and connect again (for the changes to take effect).
 
 **Configure PM2**
@@ -520,7 +520,7 @@ PM2 is a process management app (built on Node.js) which is like an enhanced Tas
 ```
 - Run this command to start the Jenkins => `pm2 start jen.json`
 - Once started, we can view the started apps by => `pm2 ls`
-  ![alt text](image-37.png)
+  ![alt text](pm2ls.png)
 - For some reason, I am **unable to end the application via PM2**. So I searched for a better alternative and found the **IBMi native service commander**
 
 ---
@@ -581,7 +581,7 @@ faced an error
    5. Run the build using,
    `makei build`
 
-    ![alt text](image-35.png)
+    ![alt text](gmakebuild.png)
 
 ---
 
@@ -589,7 +589,7 @@ faced an error
 - Chroot creates IFS containers within IBMi for `/QOpenSys`. It empowers users to have their own root folder.
 - Let's say if we have an IBMi server that already runs some OSS software in it that requires certain version of Node.JS or Python to function. We don't want to break/update that version for our DevOps practices. So we can create containers where the entire IBMi OSS environment would be run independently. 
 
-![alt text](image-40.png)
+![alt text](chrootdiag.png)
 >Further information about chroot can be found [here](https://docs.google.com/presentation/d/1t78A1YZlr88aYuEM2638U0nQywW4VQh_4H2RCtayZQo/edit#slide=id.g736c0ce3c_0_0)
 >A [blog post](https://www.krengeltech.com/2016/01/a-root-change-for-the-better/) about Chroot
 >Another [one](https://www.krengeltech.com/2016/02/a-root-change-for-the-better-part-ii/)
