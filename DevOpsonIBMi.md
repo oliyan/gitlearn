@@ -36,7 +36,7 @@
     - [For a Modernized IBM-i development:](#for-a-modernized-ibm-i-development)
 
 ---
-<img src="initsetup.jpg"  width="50">
+<img src="images/initsetup.jpg"  width="50">
 
 # Pre-requisites
 1. A GitHub Account
@@ -55,7 +55,7 @@
 
 Either set it via VS Code. 
   
-  ![alt text](bash.png)
+  ![alt text](images/bash.png)
   
 
   **<p align="center">OR</p>**
@@ -75,7 +75,7 @@ Follow the below steps if you decide to run the applications from the PASE/SSH T
 - Enter command `touch .profile` in order to create a new file called *.profile*
 - Open the file `.profile` using VS Code's IFS Browser
   
-  ![alt text](dotprofile.png)
+  ![alt text](images/dotprofile.png)
 - Copy paste the below content on the `.profile` file.
 
 ```bash
@@ -98,7 +98,7 @@ If you decide to start the application from the green screen, then you have to r
   ADDENVVAR ENVVAR('GITBUCKET_HOME') VALUE('/home/CECUSER/gitbucket') LEVEL(*SYS) REPLACE(*YES)
   /* note: You need to have ALLOBJ or SECOFR authority to run these commands  */
   ```
-  ![alt text](image-50.png)
+  ![alt text](images/image-50.png)
 
   >Note: The one time setup of Environment Variables in green screen is optional. But it doesn't hurt to setup to prevent surprises when running the applications from green screen.
 
@@ -106,12 +106,12 @@ If you decide to start the application from the green screen, then you have to r
  Once the initial setup is complete,
 - **Disconnect the IBMI and reconnect again**
 - Once connected, open up the PASE terminal again by entering `Ctrl+Shift+J` If the shell is set to bash successfully, you should see the below screen
-![alt text](image-91.png)
+![alt text](images/bashh.png)
 - Run the below command to check whether the path variable has been setup correctly.
   ```bash
   echo -e '\n' $PATH '\n' $JAVA_HOME '\n' $JENKINS_HOME '\n' $GITBUCKET_HOME '\n'
   ```
-  ![alt text](verify.png)
+  ![alt text](images/verify.png)
 
 ## Update yum packages
 In the PASE Terminal, enter `yum update` followed by `yum upgrade`
@@ -119,7 +119,7 @@ In the PASE Terminal, enter `yum update` followed by `yum upgrade`
 
 ---
 
-<img src="gitlogo.png"  width="75">
+<img src="images/gitlogo.png"  width="75">
 
 
 # Install GIT 
@@ -127,11 +127,11 @@ In the PASE Terminal, enter `yum update` followed by `yum upgrade`
 Enter the command below in your PASE terminal.
 `yum install git`
 
-![alt text](image-51.png)
+![alt text](images/image-51.png)
 >*GIT has been installed successfully*
 ---
 
-<img src="githublogo.jpg"  width="100">
+<img src="images/githublogo.jpg"  width="100">
 
 # Setup GITHUB
 Let's connect our IBMi with the GitHub and try pushing (a.k.a. updating our sources) directly to the GitHub Repository.
@@ -148,31 +148,31 @@ Let's connect our IBMi with the GitHub and try pushing (a.k.a. updating our sour
 - Hit enter again to save the key pair at the default location itself. 
 - Hit enter again (no passphrase is required)
 - Notice the location of the public key and open it in your VS Code. 
- ![alt text](image-52.png)
+ ![alt text](images/image-52.png)
 
 **Copy the public key**
 - Navigate to the same folder in your VS Code as below and open the public key
   
-  ![alt text](image-53.png)
+  ![alt text](images/image-53.png)
 - Copy all the contents of the file. We need to put that into our GitHub account.
   
 **Create New SSH Key in your GitHub account**
 - Open https://github.com/settings/keys and click 'New SSH Key'. 
 - Enter some title, Select the key type as "authentication key", paste the previously copied public key, and finally select 'Add SSH Key"
-  ![alt text](image-54.png)
+  ![alt text](images/image-54.png)
 - Once added, you should see the below screen
-  ![alt text](image-55.png)
+  ![alt text](images/image-55.png)
 
 **Create a GitHub repository**
 - Let's create a new empty repository in our GitHub account.
 - Click on Repository >> Click New
-  ![alt text](image-56.png)
+  ![alt text](images/image-56.png)
 - Enter the repository name, some meaningful description, set it public, add a README.md file and click create repository.
-  ![alt text](image-57.png)
+  ![alt text](images/image-57.png)
 - Nice, we have our own GitHub repository now.
-  ![alt text](image-58.png)
+  ![alt text](images/image-58.png)
 - Click on the green `<> Code` button, click on `SSH` and copy the URL
-   ![alt text](image-59.png)
+   ![alt text](images/image-59.png)
 <br>
 - FYI: This is the command that I just copied
 `git@github.com:ravisankar-PIO/gitonibmi.git`
@@ -182,9 +182,9 @@ Let's connect our IBMi with the GitHub and try pushing (a.k.a. updating our sour
 `git clone git@github.com:ravisankar-PIO/gitonibmi.git`
 Enter `yes` if it asks for anything about Fingerprint and Keys. Now we have successfully cloned the GitHub Repository to our IBMi's IFS folder.
 
-  ![alt text](image-60.png)
+  ![alt text](images/image-60.png)
 
-  ![alt text](image-82.png)
+  ![alt text](images/image-82.png)
 
 **Create a simple sqlrpgle program**
 - Let's create an SQLRPGLE program which inserts a record into some file for every time it is called.
@@ -193,7 +193,7 @@ Enter `yes` if it asks for anything about Fingerprint and Keys. Now we have succ
 - `git init` => *to initialize the git repository*
 - `touch buildr.sqlrpgle` => *to create a new SQLRPGLE program*
 - Once created, open the same file in your VS Code editor via the IFS Browser.
-  ![alt text](image-62.png)
+  ![alt text](images/image-62.png)
 <br>
 - Copy paste the below code into the `buildr.sqlrpgle` file and save it.
 ```js
@@ -211,30 +211,30 @@ exec sql INSERT INTO ravi.buildpf (note) VALUES (:note);
 
 **Commit the program**
 - Once you saved the sqlrpgle program, head over to the PASE Terminal and enter the below commands one by one. Read below for explanation
-```bash
-git add buildr.sqlrpgle
-git commit -m "added build sqlrpgle program"
-git push
-```
->*Explanation*
-> * `git add` => we're telling the GIT that we're adding a new file in our repository. So that it will watch for that file for any changes.
-> * `git commit` => we're telling the GIT that we want to commit our changes for the previously added/edited files. The commit message describes the purpose of this change. Imagine you're doing a code change, so doing a  `git commit` means you're 100% sure that the code change is right and it can be pushed to the QA/Prod. Once the commit is done, git will take a snapshot of the entire repository and you can access this snapshot anytime (like a time machine). 
-> *  `git push` => we're telling the GIT to push the changes to the remote repository (GitHub). So far the changes are done only to the local git (i.e. dev library). Once this is done, the GitHub should reflect the updated sources. This is like promoting the sources to the QA/Prod.
-> * *Tip: between every command, you can check the status by issuing 'git status' command*
+  ```bash
+  git add buildr.sqlrpgle
+  git commit -m "added build sqlrpgle program"
+  git push
+  ```
+  >*Explanation*
+  > * `git add` => we're telling the GIT that we're adding a new file in our repository. So that it will watch for that file for any changes.
+  > * `git commit` => we're telling the GIT that we want to commit our changes for the previously added/edited files. The commit message describes the purpose of this change. Imagine you're doing a code change, so doing a  `git commit` means you're 100% sure that the code change is right and it can be pushed to the QA/Prod. Once the commit is done, git will take a snapshot of the entire repository and you can access this snapshot anytime (like a time machine). 
+  > *  `git push` => we're telling the GIT to push the changes to the remote repository (GitHub). So far the changes are done only to the local git (i.e. dev library). Once this is done, the GitHub should reflect the updated sources. This is like promoting the sources to the QA/Prod.
+  > * *Tip: between every command, you can check the status by issuing 'git status' command*
 
 - Once the changes are pushed, you should see a message like something below
-  ![alt text](image-63.png)
+  ![alt text](images/image-63.png)
 
 - Head over to the GitHub repository to check if the changes are updated there.
-  ![alt text](image-64.png)
+  ![alt text](images/image-64.png)
 
   **Congratulations! You have successfully modernized the IBM i development to GitHub.**
 
-  ![alt text](image-83.png)
+  ![alt text](images/image-83.png)
 
 
 ---
-<img src="jenkinslogo.jpg"  width="150">
+<img src="images/jenkinslogo.jpg"  width="150">
 
 # Setup Jenkins
 Jenkins is a java based application for setting up CI/CD pipeline. We will setup Jenkins in our IBMi and serve it from the IBMi's IP address itself.
@@ -245,7 +245,7 @@ Run the below commands in your PASE terminal to download the `jenkins.war` via `
 cd ~ 
 wget http://mirrors.jenkins.io/war-stable/latest/jenkins.war
 ```
-![alt text](image-65.png)
+![alt text](images/image-65.png)
 > *Jenkins is downloaded successfully!*
 <br>
 
@@ -270,18 +270,18 @@ Launching the Jenkins app is nothing but launching the `jenkins.war` file via a 
 
  ### Initial Configuration
 - If all worked correctly, then a default admin password will be stored on the below location. Open the file `initialAdminPassword` and copy the contents of that file to your clipboard.
-  ![alt text](image-67.png)
+  ![alt text](images/image-67.png)
 
 
 - **Jenkins initial setup in browser**
 Head over to the browser and type in the IP address of the IBMi followed by the port# that we defined earlier. In my case, it is `http://129.40.94.17:9095/`. Paste the admin password that we just copied a while ago to unlock Jenkins. 
-![alt text](image-68.png)
+![alt text](images/image-68.png)
 
   Remember to select =="Install suggested plugins"==
   *(**Note**: It will take some time to load the next screen. Don't click more than once, as it might end up in error)*
-  ![alt text](jenplugin.png)
+  ![alt text](images/jenplugin.png)
   *plugins are currently loaded*
-  ![plugins are loaded](image-99.png)
+  ![plugins are loaded](images/image-99.png)
 
   Let's create an Admin user which will be used to login to the Jenkins app from now on. 
 
@@ -290,80 +290,80 @@ Head over to the browser and type in the IP address of the IBMi followed by the 
   Password: welcome
   Email: ravisankar.pandian@programmers.io
   ```
-  ![alt text](adminuser.png)
+  ![alt text](images/adminuser.png)
 
   *click on save and finish to complete the setup*
-  ![alt text](instance.png)
+  ![alt text](images/instance.png)
 
   *Nice! we can start using the Jenkins now*
-  ![alt text](image-97.png)
+  ![alt text](images/image-97.png)
 
   *If you see a notification at the top as given below, It is advised to have a separate node for building the code. But we will click dismiss for now and continue with our work*
-  ![alt text](image-98.png)
+  ![alt text](images/image-98.png)
 
 <br>
 
 ### Create a New Job in Jenkins
 - On the Dashboard, click on New Item
-  ![alt text](image-69.png)
+  ![alt text](images/image-69.png)
   <br>
 - Enter the Job Name as `gitonibmi`, select `freestyle project` and click OK.
-  ![alt text](image-71.png)
+  ![alt text](images/image-71.png)
 
 ### Configure the Job to connect to GitHub
 - In the Job Configuration Page, Click on the `Source Code Management` on the left, and select `GIT`. 
 - Remember the Repository URL that we copied a while ago from our GitHub? We need to paste that over here. 
-  ![alt text](image-72.png)
+  ![alt text](images/image-72.png)
 - Make sure to clear out the branches to build field
-  ![alt text](image-81.png)
+  ![alt text](images/image-81.png)
 
 **Add a credential**
 - Notice the `+Add` button under credential. Click on it to add a credential to connect to the GitHub securely.
   *Note: Sometimes, the button will load slowly. So don't press multiple times*
-  ![alt text](image-73.png)
+  ![alt text](images/image-73.png)
 - Enter the details as below
   - Domain - Global (unrestricted)
   - Kind - SSH Username with Private key
   - Scope - Global
   - ID - anything you like
   - Private key - Select `enter directly` => click add => Open the private key from your ssh folder as below => copy the entire content => finally paste it on Jenkins window.
-  ![alt text](image-74.png) <br> 
+  ![alt text](images/image-74.png) <br> 
   - Then click add
   - Then, click on the credentials drop down, and select the one that has your user name.
-   ![alt text](image-79.png)
+   ![alt text](images/image-79.png)
 
 **Add a Build Trigger**
 - Click on `Build Triggers` on the left menu and check `Poll SCM`
-  ![alt text](image-75.png)
+  ![alt text](images/image-75.png)
 - Enter the value as `* * * * *` (5 asteriks with spaces inbetween). This is a cron scheduler which will look for any changes made in our repository for every minute and then execute the build steps.
-  ![alt text](image-76.png)
+  ![alt text](images/image-76.png)
 
 **Add Build Steps**
 - Scroll down to find `Build Steps` and click on it, then select `Execute Shell`
-  ![alt text](image-77.png)
+  ![alt text](images/image-77.png)
 - Enter the below PASE command 
   `system "CALL PGM(RAVI/BUILDR)"`
   This means whenever the GitHub repository is committed (i.e. updated), we will call a program called `buildr` 
   <br>
 - That's it! We will save the Job Configuration now.
-  ![alt text](image-78.png)
+  ![alt text](images/image-78.png)
 
 **Error!**
 Are you seeing this error below and wondering what you did wrong? Don't worry as I am on your side too! The same error happened to me as well. This could be a bug in Jenkins, but let's just proceed forward.
-![alt text](image-80.png)  
+![alt text](images/image-80.png)  
 
 **What we have done so far?**
 - We have added a Jenkins job to listen on the GitHub repository for any change.
 - If any change(commit) occurs, then the Jenkins will execute the shell commands that we have entered in the 'build steps'. 
 - The shell command is nothing but to call an SQLRPGLE program which will insert a record to the buildpf with the build#.
 
-**Let's try it in action**
+**Let's try it in action!**
 - For the sake of simplicity, let's update the `README.md` file via VS Code and push the changes to the GitHub repo. We will expect the Jenkins to pickup the change and process the job.
 - Open the `README.md` file
-  ![alt text](image-86.png) 
+  ![alt text](images/image-86.png) 
   <br>
 - Add another line and save it.
-  ![alt text](image-87.png) 
+  ![alt text](images/image-87.png) 
   <br>
 - Head over to the PASE terminal and enter commands below.
   ```bash
@@ -373,20 +373,21 @@ Are you seeing this error below and wondering what you did wrong? Don't worry as
   ```
   <br>
 - Wait for a few seconds and check your build history in Jenkins. Click on the build#. In my case it is #4, but for you it should probably be #1.
-  ![alt text](image-88.png) 
+  ![alt text](images/image-88.png) 
   <br>
 
 - Let's check the console ouput as well.
-  ![alt text](image-89.png)
+  ![alt text](images/image-89.png)
   It is success!
   <br>
 
 - Let's check our physical file if the shell script got executed correctly.
   `select * from ravi/buildpf`
-  ![alt text](image-90.png)
+  ![alt text](images/image-90.png)
   >Nice! It is working
 
 ---
+<img src="https://gitbucket.github.io/img/logo-gitbucket.png">
 
 # Install GitBucket on IBMi
 Gitbucket is a JAVA based SCM tool which can be run on IBMi. This is an Open Source alternative to GitHub.
@@ -459,7 +460,7 @@ First, I **Installed the dependencies for GitLab**
 `yum install -y curl policycoreutils-python openssh-server perl`
 
 https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.rpm.sh
-![alt text](gitlabd.png)
+![alt text](images/gitlabd.png)
 
 - Read more about Gitlab
   - [dependencies for GitLab](https://archlinux.org/packages/extra/x86_64/gitlab/)
@@ -468,7 +469,7 @@ https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.rpm.sh
   - [Gitlab installation steps](https://docs.gitlab.com/ee/install/installation.html)
   
 ---
-<img src="pm2logo.png"  width="350">
+<img src="images/pm2logo.png"  width="350">
 
 ## PM2
 PM2 is a process management app (built on Node.js) which is like an enhanced Task Manager for IBMi. It will be used to autostart, keep the node.js & java based apps persistent.
@@ -520,7 +521,7 @@ PM2 is a process management app (built on Node.js) which is like an enhanced Tas
 ```
 - Run this command to start the Jenkins => `pm2 start jen.json`
 - Once started, we can view the started apps by => `pm2 ls`
-  ![alt text](pm2ls.png)
+  ![alt text](images/pm2ls.png)
 - For some reason, I am **unable to end the application via PM2**. So I searched for a better alternative and found the **IBMi native service commander**
 
 ---
@@ -534,26 +535,26 @@ PM2 is a process management app (built on Node.js) which is like an enhanced Tas
   `scinit java -jar /home/CECUSER/jenkins.war --httpPort=9095`
 - Service commander is an intelligent tool that will ask us series of questions in order to be able to do the intial setup.
 
-| Question | Answer |  
-|-|-|
-| Would you like this service to be available to all users? [n] <br> <p style="font-size:12px"> (we don't want other users to start this application)</p> | n
-| Short Name <br> <p style="font-size:12px"> (this will be the name to start the application. So choose wisely)</p> | jenkins
-| Friendly Name <br> <p style="font-size:12px">(a short description about the app)</p> | Jenkins for IBMi
-| Start app in the current directory (/home/CECUSER)? [y] <br> <p style="font-size:12px"> (yes, we want to start the app in the current directory)</p> | y
-| App to be run under a unique Job Name? <br> <p style="font-size:12px"> (No, so we will leave it to blanks) </p> | <blanks>
-| Submit to batch? <br> <p style="font-size:12px"> (No, we will run the app from within PASE environment)</p> | n
-| Environment Variables? <br> <p style="font-size:12px"> (Since we have already setup the path variables, we will leave it as blanks)</p> | 
-| What Other Environment Variables? <br> <p style="font-size:12px"> (Nothing here, just hit enter again)</p> | 
-| What Other groups would this app be a part of? <br> <p style="font-size:12px"> (Nothing here, just hit enter again)</p> | 
-| What Other services would this app be a part of? <br> <p style="font-size:12px"> (Nothing here, just hit enter again)</p> | 
+  | Question | Answer |  
+  |-|-|
+  | Would you like this service to be available to all users? [n] <br> <p style="font-size:12px"> (we don't want other users to start this application)</p> | n
+  | Short Name <br> <p style="font-size:12px"> (this will be the name to start the application. So choose wisely)</p> | jenkins
+  | Friendly Name <br> <p style="font-size:12px">(a short description about the app)</p> | Jenkins for IBMi
+  | Start app in the current directory (/home/CECUSER)? [y] <br> <p style="font-size:12px"> (yes, we want to start the app in the current directory)</p> | y
+  | App to be run under a unique Job Name? <br> <p style="font-size:12px"> (No, so we will leave it to blanks) </p> | <blanks>
+  | Submit to batch? <br> <p style="font-size:12px"> (No, we will run the app from within PASE environment)</p> | n
+  | Environment Variables? <br> <p style="font-size:12px"> (Since we have already setup the path variables, we will leave it as blanks)</p> | 
+  | What Other Environment Variables? <br> <p style="font-size:12px"> (Nothing here, just hit enter again)</p> | 
+  | What Other groups would this app be a part of? <br> <p style="font-size:12px"> (Nothing here, just hit enter again)</p> | 
+  | What Other services would this app be a part of? <br> <p style="font-size:12px"> (Nothing here, just hit enter again)</p> | 
 
 
 - If all worked correctly, then you should see the below output
-  ![alt text](image-84.png)
+  ![alt text](images/image-84.png)
 
 - Now let us start the application by entering
   `sc start jenkins`
-  ![alt text](image-85.png)
+  ![alt text](images/image-85.png)
 
 
 ---
@@ -581,7 +582,7 @@ faced an error
    5. Run the build using,
    `makei build`
 
-    ![alt text](gmakebuild.png)
+    ![alt text](images/gmakebuild.png)
 
 ---
 
@@ -589,7 +590,7 @@ faced an error
 - Chroot creates IFS containers within IBMi for `/QOpenSys`. It empowers users to have their own root folder.
 - Let's say if we have an IBMi server that already runs some OSS software in it that requires certain version of Node.JS or Python to function. We don't want to break/update that version for our DevOps practices. So we can create containers where the entire IBMi OSS environment would be run independently. 
 
-![alt text](chrootdiag.png)
+![alt text](images/chrootdiag.png)
 >Further information about chroot can be found [here](https://docs.google.com/presentation/d/1t78A1YZlr88aYuEM2638U0nQywW4VQh_4H2RCtayZQo/edit#slide=id.g736c0ce3c_0_0)
 >A [blog post](https://www.krengeltech.com/2016/01/a-root-change-for-the-better/) about Chroot
 >Another [one](https://www.krengeltech.com/2016/02/a-root-change-for-the-better-part-ii/)
@@ -619,18 +620,18 @@ May be a **self hosted GitBucket**, running along with **Jenkins**, that trigger
 ![final thoughts](https://user-images.githubusercontent.com/3708366/284319322-90b97bac-0b39-418f-a24e-da62338c26a1.png)
 
 
-![alt text](image-42.png)
+![alt text](images/image-42.png)
 
-![alt text](image-43.png)
+![alt text](images/image-43.png)
 
-![alt text](image-44.png)
+![alt text](images/image-44.png)
 
-![alt text](image-45.png)
+![alt text](images/image-45.png)
 
-![alt text](image-46.png)
+![alt text](images/image-46.png)
 
-![alt text](image-47.png)
+![alt text](images/image-47.png)
 
-![alt text](image-48.png)
+![alt text](images/image-48.png)
 
-![alt text](image-49.png)
+![alt text](images/image-49.png)
